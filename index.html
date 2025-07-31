@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Juego del Carrito para mi novia</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: #000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    body {
+        display: flex;
+        flex-direction: column;
+    }
+
+    h1 {
+        color: #fff;
+    }
+
+    #game {
+      width: 300px;
+      height: 500px;
+      background: #333;
+      border: 3px solid white;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #car {
+      width: 80px;
+      height: 100px;
+      background: limegreen;
+      position: absolute;
+      bottom: 10px;
+      left: 110px;
+      border-radius: 10px;
+    }
+
+    #obstacle {
+      width: 80px;
+      height: 100px;
+      background: red;
+      position: absolute;
+      top: -100px;
+      left: 110px;
+      border-radius: 10px;
+    }
+
+    #controls {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      z-index: 2;
+    }
+
+    #controls button {
+      width: 50%;
+      height: 60px;
+      font-size: 2em;
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+    <h1>Te amo mi vida!</h1>
+  <div id="game">
+    <div id="car"></div>
+    <div id="obstacle"></div>
+    <div id="controls">
+      <button id="left">⬅️</button>
+      <button id="right">➡️</button>
+    </div>
+  </div>
+
+  <script>
+    const car = document.getElementById("car");
+    const obstacle = document.getElementById("obstacle");
+    const leftBtn = document.getElementById("left");
+    const rightBtn = document.getElementById("right");
+
+    const lanes = [10, 110, 210]; // posiciones: izquierda, centro, derecha
+    let carLane = 1;
+    let obstacleY = -100;
+    let obstacleLane = Math.floor(Math.random() * 3);
+
+    function updateCarPosition() {
+      car.style.left = lanes[carLane] + "px";
+    }
+
+    leftBtn.addEventListener("click", () => {
+      if (carLane > 0) {
+        carLane--;
+        updateCarPosition();
+      }
+    });
+
+    rightBtn.addEventListener("click", () => {
+      if (carLane < 2) {
+        carLane++;
+        updateCarPosition();
+      }
+    });
+
+    function resetObstacle() {
+      obstacleY = -100;
+      obstacleLane = Math.floor(Math.random() * 3);
+      obstacle.style.left = lanes[obstacleLane] + "px";
+    }
+
+    function checkCollision() {
+      if (
+        obstacleY > 390 && obstacleY < 500 &&
+        obstacleLane === carLane
+      ) {
+        alert("tienes que esquivar los coches amor (con un poco de imaginacion veras unos coches jsjs)");
+        location.reload();
+      }
+    }
+
+    function moveObstacle() {
+      obstacleY += 5;
+      if (obstacleY > 500) {
+        resetObstacle();
+      }
+      obstacle.style.top = obstacleY + "px";
+      checkCollision();
+    }
+
+    resetObstacle();
+    updateCarPosition();
+    setInterval(moveObstacle, 30);
+  </script>
+</body>
+</html>
